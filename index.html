@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>教檢必考｜教學理論×設計×方法</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700;900&family=Noto+Sans+TC:wght@300;400;500;700&display=swap');
+
+  :root {
+    --ink: #1a1208;
+    --paper: #faf7f0;
+    --gold: #c8962a;
+    --gold-light: #f0d080;
+    --red: #c0392b;
+    --blue: #1a4a7a;
+    --green: #1a5c3a;
+    --purple: #4a1a6e;
+    --muted: #7a6a50;
+    --border: #d4c89a;
+    --highlight: #fff8d6;
+    --card-bg: #fffdf7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* NAV */
+  nav {
+    background: var(--ink);
+    color: var(--gold-light);
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: stretch;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 14px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .nav-tab:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-tab.active { border-bottom-color: var(--gold); color: var(--gold-light); background: rgba(200,150,42,0.12); }
+
+  /* HEADER */
+  .page-header {
+    background: linear-gradient(135deg, var(--ink) 0%, #2d1f0a 100%);
+    color: var(--gold-light);
+    text-align: center;
+    padding: 36px 20px 28px;
+    border-bottom: 3px solid var(--gold);
+  }
+  .page-header h1 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: clamp(22px, 5vw, 36px);
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  .page-header p {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+  }
+
+  /* SECTIONS */
+  .section { display: none; padding: 24px 16px 48px; max-width: 900px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* SECTION TITLE */
+  .sec-title {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--ink);
+    border-left: 5px solid var(--gold);
+    padding-left: 14px;
+    margin-bottom: 20px;
+    letter-spacing: 0.06em;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 18px;
+    cursor: pointer;
+    background: var(--highlight);
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    user-select: none;
+  }
+  .card-header:hover { background: #fff3b0; }
+  .card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .card-name {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+  }
+  .scholar-tag {
+    font-size: 11px;
+    background: var(--blue);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+  .mnemonic-tag {
+    font-size: 11px;
+    background: var(--red);
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 99px;
+    font-weight: 700;
+  }
+  .toggle-icon {
+    font-size: 18px;
+    color: var(--gold);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .card.open .toggle-icon { transform: rotate(180deg); }
+
+  .card-body {
+    display: none;
+    padding: 16px 18px;
+    border-top: 1px solid var(--border);
+    background: #fff;
+  }
+  .card.open .card-body { display: block; }
+
+  /* BOLD KEY TERMS */
+  .key { font-weight: 700; color: var(--ink); }
+  .key-red { font-weight: 700; color: var(--red); }
+  .key-blue { font-weight: 700; color: var(--blue); }
+  .key-green { font-weight: 700; color: var(--green); }
+  .key-purple { font-weight: 700; color: var(--purple); }
+
+  /* POINT LIST */
+  .point-list { list-style: none; padding: 0; }
+  .point-list li {
+    padding: 5px 0 5px 18px;
+    position: relative;
+    font-size: 14px;
+    line-height: 1.7;
+    border-bottom: 1px dashed #e8e0cc;
+  }
+  .point-list li:last-child { border-bottom: none; }
+  .point-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-size: 12px;
+    top: 6px;
+  }
+
+  /* SUB LIST */
+  .sub-list { list-style: none; padding-left: 16px; margin-top: 4px; }
+  .sub-list li { padding: 3px 0 3px 14px; font-size: 13px; color: #3a3020; }
+  .sub-list li::before { content: '→'; color: var(--muted); margin-right: 4px; }
+
+  /* MNEMONIC BOX */
+  .mnemonic-box {
+    background: linear-gradient(135deg, #fff8d0, #fef0a0);
+    border: 2px solid var(--gold);
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 14px;
+  }
+  .mnemonic-box .mnemonic-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .mnemonic-box .mnemonic-text {
+    font-family: 'Noto Serif TC', serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--red);
+    letter-spacing: 0.15em;
+  }
+  .mnemonic-box .mnemonic-expand {
+    font-size: 12px;
+    color: var(--ink);
+    margin-top: 4px;
+    line-height: 1.6;
+  }
+
+  /* TABLE */
+  .mini-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  .mini-table th {
+    background: var(--ink);
+    color: var(--gold-light);
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .mini-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #e8e0cc;
+    vertical-align: top;
+    line-height: 1.6;
+  }
+  .mini-table tr:nth-child(even) td { background: #faf7f0; }
+  .mini-table tr:hover td { background: var(--highlight); }
+
+  /* GROUP LABEL */
+  .group-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--paper);
+    background: var(--ink);
+    padding: 6px 14px;
+    border-radius: 4px;
+    margin: 22px 0 10px;
+    letter-spacing: 0.08em;
+    display: inline-block;
+  }
+
+  /* QUIZ MODE */
+  #quiz-section { display: none; }
+  #quiz-section.active { display: block; }
+  .quiz-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+  .quiz-q {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    line-height: 1.6;
+  }
+  .quiz-choices { list-style: none; padding: 0; }
+  .quiz-choices li {
+    padding: 10px 14px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+  .quiz-choices li:hover { border-color: var(--gold); background: var(--highlight); }
+  .quiz-choices li.correct { border-color: var(--green); background: #e8f5e9; color: var(--green); font-weight: 700; }
+  .quiz-choices li.wrong { border-color: var(--red); background: #fde8e8; color: var(--red); }
+  .quiz-choices li.disabled { pointer-events: none; }
+  .quiz-explain {
+    display: none;
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: var(--highlight);
+    border-left: 4px solid var(--gold);
+    border-radius: 4px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+  .quiz-explain.show { display: block; }
+  .quiz-score {
+    text-align: center;
+    font-family: 'Noto Serif TC', serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--gold);
+    padding: 20px;
+    margin-top: 10px;
+  }
+  .btn {
+    display: inline-block;
+    padding: 10px 22px;
+    background: var(--ink);
+    color: var(--gold-light);
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: background 0.2s;
+    margin-top: 10px;
+  }
+  .btn:hover { background: #3a2a0a; }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--ink);
+  }
+  .btn-gold:hover { background: #b07820; }
+
+  /* OVERVIEW GRID */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 14px;
+    margin-top: 10px;
+  }
+  .overview-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    border-top: 4px solid var(--gold);
+  }
+  .overview-card h4 {
+    font-family: 'Noto Serif TC', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--ink);
+  }
+  .overview-card .count {
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--gold);
+    font-family: 'Noto Serif TC', serif;
+  }
+  .overview-card p { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* PROGRESS */
+  .progress-wrap { margin-bottom: 20px; }
+  .progress-bar-bg {
+    background: #e0d8c0;
+    border-radius: 99px;
+    height: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--red));
+    border-radius: 99px;
+    transition: width 0.4s;
+  }
+  .progress-text { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  @media (max-width: 600px) {
+    .section { padding: 16px 12px 40px; }
+    .card-header { padding: 12px 14px; }
+    .card-body { padding: 12px 14px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>教檢必考重點速記</h1>
+  <p>教學理論基礎 × 教學設計 × 教學方法｜粗體關鍵字 全收錄</p>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="nav-tab active" onclick="showSection('overview')">📊 總覽</div>
+    <div class="nav-tab" onclick="showSection('theory')">一、教學理論基礎</div>
+    <div class="nav-tab" onclick="showSection('design')">二、教學設計</div>
+    <div class="nav-tab" onclick="showSection('methods')">三、教學方法</div>
+    <div class="nav-tab" onclick="showSection('quiz')">✏️ 練習測驗</div>
+  </div>
+</nav>
+
+<!-- ==================== OVERVIEW ==================== -->
+<div id="overview" class="section active">
+  <div class="sec-title">必考架構一覽</div>
+
+  <div class="overview-grid">
+    <div class="overview-card">
+      <div class="count">7</div>
+      <h4>教學規準</h4>
+      <p>效率性、認知性、價值性、自願性、目的性、釋明性、覺知性</p>
+    </div>
+    <div class="overview-card">
+      <div class="count">7</div>
+      <h4>Shulman 教師知識</h4>
+      <p>學科內容、一般教學、課程、學科教學、學習者特性、情境、教育目的</p>
+    </div>
+    <div class="overview-card">
+      <div class="count">12</div>
+      <h4>重要教學理論</h4>
+      <p>操作制約→Skinner、發現學習→Bruner… 等 12 位代表學者</p>
+    </div>
+    <div class="overview-card">
+      <div class="count">9</div>
+      <h4>教學原則</h4>
+      <p>準備、類化、自動、興趣、個別適應、社會化、熟練、同時學習…</p>
+    </div>
+    <div class="overview-card">
+      <div class="count">4</div>
+      <h4>教學設計模式</h4>
+      <p>GMI / ASSURE / Dick & Carey / R2D2 / ARCS（含ADDIE）</p>
+    </div>
+    <div class="overview-card">
+      <div class="count">20+</div>
+      <h4>教學方法</h4>
+      <p>8大類：教師本位、認知、情意、技能、個別化、合作、概念思考、其他</p>
+    </div>
+  </div>
+
+  <div class="mnemonic-box" style="margin-top:24px">
+    <div class="mnemonic-label">⚡ 三大主題快速定向口訣</div>
+    <div class="mnemonic-text">理→設→法</div>
+    <div class="mnemonic-expand">
+      <strong>理</strong>（理論基礎）→ 先懂「誰說什麼」（Skinner / Bruner / Vygotsky…）<br>
+      <strong>設</strong>（教學設計）→ 再懂「怎麼規劃」（GMI / ARCS / ASSURE…）<br>
+      <strong>法</strong>（教學方法）→ 最後懂「怎麼教」（講述→探究→討論→合作…）
+    </div>
+  </div>
+</div>
+
+<!-- ==================== THEORY ==================== -->
+<div id="theory" class="section">
+  <div class="sec-title">一、教學理論基礎</div>
+
+  <!-- 教學規準 -->
+  <div class="group-label">【教學的規準】Peters（2-4）／Hirst（5-7）</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">教學規準 7 條</span>
+        <span class="scholar-tag">Peters & Hirst</span>
+        <span class="mnemonic-tag">口訣：效認價自 目釋覺</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="mini-table">
+        <tr><th>規準</th><th>英文</th><th>核心意義（括號為對應面向）</th></tr>
+        <tr><td><span class="key">效率性</span></td><td>efficienciness</td><td>教學活動達到目標的快慢或效果 →（<span class="key-red">教學設計</span>）</td></tr>
+        <tr><td><span class="key">認知性</span></td><td>cognitiveness</td><td>探求事實和真理的認知 →（<span class="key-red">教學內容</span>）教地理而非風水</td></tr>
+        <tr><td><span class="key">價值性</span></td><td>worthwhileness</td><td>對個人或社會具有向上向善的價值 →（<span class="key-red">教學結果</span>）</td></tr>
+        <tr><td><span class="key">自願性</span></td><td>voluntariness</td><td>用啟發方式，不強迫、不揠苗助長 →（<span class="key-red">教學方法</span>）</td></tr>
+        <tr><td><span class="key">目的性</span></td><td>purposiveness</td><td>有計畫有目的，達到預期學習成果（ILO）</td></tr>
+        <tr><td><span class="key">釋明性</span></td><td>indicativeness</td><td>讓學生瞭解明確教學意圖；釋明性↑→效果↑</td></tr>
+        <tr><td><span class="key">覺知性</span></td><td>perceptiveness</td><td>師生能共同覺察，學生能接受並有學習意願</td></tr>
+      </table>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣</div>
+        <div class="mnemonic-text">效認價自 目釋覺</div>
+        <div class="mnemonic-expand">效率→認知→價值→自願（Peters 2-4）｜目的→釋明→覺知（Hirst 5-7）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shulman -->
+  <div class="group-label">【Shulman 教師知識】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">Shulman 7 種教師知識</span>
+        <span class="scholar-tag">Shulman</span>
+        <span class="mnemonic-tag">口訣：學一課學科 學教情目</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li><span class="key">學科內容知識</span> subject matter knowledge：各學科的內容知識</li>
+        <li><span class="key">一般教學知識</span> general pedagogical knowledge：各科均適用的教學原則與策略（教心、班經等）</li>
+        <li><span class="key">課程知識</span> curriculum knowledge：設計、組織、銜接課程的基本知識</li>
+        <li><span class="key">學科教學知識</span> pedagogical content knowledge（<span class="key-red">PCK</span>）：融合學科與教學法，將學科轉化為教學思維與策略 ← 最常考</li>
+        <li><span class="key">學習者特性的知識</span> knowledge of learner：了解學生發展層次與先備概念</li>
+        <li><span class="key">教育情境知識</span> knowledge of educational context：了解教室、學區、教育環境</li>
+        <li><span class="key">教育目的、價值及哲學歷史背景的知識</span></li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（7種）</div>
+        <div class="mnemonic-text">學一課 學科 學教情目</div>
+        <div class="mnemonic-expand">學科內容 → 一般教學 → 課程 → 學科教學(PCK) → 學習者特性 → 教育情境 → 目的哲史</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 重要教學理論 -->
+  <div class="group-label">【重要教學理論 × 代表學者】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">操作制約學習理論</span>
+        <span class="scholar-tag">Skinner</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>教學定義：<span class="key">刻意安排學習情境</span>，透過<span class="key">增強策略</span>，塑造預期行為</li>
+        <li>教學原則：<span class="key">積極反應原則</span>、<span class="key">小單位原則</span>、<span class="key">即時增強原則</span>、<span class="key">個別進度原則</span></li>
+        <li>教學技術應用：<span class="key">代幣</span>、<span class="key">行為改變技術</span></li>
+        <li>教學方法應用：<span class="key">編序教學</span>、<span class="key">電腦輔導教學</span>、<span class="key">個人化系統教學</span>、<span class="key">凱勒計畫</span>、<span class="key">精熟學習</span></li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（教學方法4種）</div>
+        <div class="mnemonic-text">編電個精</div>
+        <div class="mnemonic-expand">編序→電腦→個人化系統→精熟學習</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">發現學習理論</span>
+        <span class="scholar-tag">Bruner</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>定義：教師安排有利於<span class="key">發現各種結構</span>的情境，讓學生<span class="key">主動去發現知識結構</span></li>
+        <li>強調學生<span class="key">主動學習</span>的可能性</li>
+        <li>教學情境的<span class="key">結構性</span>須符應學生認知發展表徵</li>
+        <li>認知發展三階段：<span class="key">動作表徵</span>→<span class="key">影像表徵</span>→<span class="key">符號表徵</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">意義學習理論</span>
+        <span class="scholar-tag">Ausubel</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>闡釋型教學：有意義學習產生於<span class="key">先備知識（前導組織）</span>基礎上</li>
+        <li>影響：<span class="key">接受式學習</span>、<span class="key">講解式學習</span>（但非被動，學生仍主動求知）</li>
+        <li>學生能有意義<span class="key">連結新、舊基模</span>，獲取新學習歷程</li>
+        <li>目的：直接解決學校教學問題；涉及<span class="key">學習、教學、課程</span>三者</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">認知發展理論</span>
+        <span class="scholar-tag">Piaget</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>認為學生<span class="key">積極主動地學習</span>，建構本身的意義價值體系</li>
+        <li>依據學生的<span class="key">思維方式</span>進行教學</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">社會認知發展理論</span>
+        <span class="scholar-tag">Vygotsky</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li><span class="key">社會文化</span>是影響學生認知發展的重要因素</li>
+        <li>需利用<span class="key">可能發展區（ZPD）</span>來產生教學最佳效果，並適時輔導</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">社會/互動學習論</span>
+        <span class="scholar-tag">Bandura</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li><span class="key">身教重於言教</span></li>
+        <li>影響：<span class="key">教學演示</span>、<span class="key">觀摩教學</span>與<span class="key">示範教學</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">學習階層論</span>
+        <span class="scholar-tag">Gagné</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>兼具<span class="key">統合性與處方性</span>的教學目標分類</li>
+        <li>每一學科包括五類教學目標：<span class="key">心智技能</span>、<span class="key">認知策略</span>、<span class="key">語文知識</span>、<span class="key">動作技能</span>、<span class="key">態度</span></li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（5目標）</div>
+        <div class="mnemonic-text">心認語動態</div>
+        <div class="mnemonic-expand">心智技能→認知策略→語文知識→動作技能→態度</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">情境認知學習理論</span>
+        <span class="scholar-tag">Lave</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>主張<span class="key">豐富學習資源</span>與<span class="key">多元學習策略</span>的重要性</li>
+        <li>強調學習發生於<span class="key">真實的社會文化情境</span>中</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">人本心理學學習理論</span>
+        <span class="scholar-tag">Maslow</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>培養學生<span class="key">健全人格</span>，獲得<span class="key">適性發展</span></li>
+        <li>影響：<span class="key">開放教室</span>、<span class="key">合作學習</span>、<span class="key">當事人中心治療法</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">合作學習理論</span>
+        <span class="scholar-tag">Slavin</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li><span class="key">團體探究法</span></li>
+        <li><span class="key">共同學習法</span></li>
+        <li><span class="key">拼圖法</span></li>
+        <li><span class="key">合作整合閱讀與寫作法</span>（CIRC）</li>
+        <li><span class="key">小組輔助個別化學習法</span>（TAI）</li>
+        <li><span class="key">學生小組成就區分法</span>（STAD）</li>
+        <li><span class="key">小組遊戲競賽法</span>（TGT）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">創造思考教學理論</span>
+        <span class="scholar-tag">Torrance</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>創造力特徵：<span class="key">流暢性</span>、<span class="key">變通性</span>、<span class="key">獨創性</span>與<span class="key">精緻性</span></li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣</div>
+        <div class="mnemonic-text">流變獨精</div>
+        <div class="mnemonic-expand">流暢性→變通性→獨創性→精緻性</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 教學原則 -->
+  <div class="group-label">【重要教學原則】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">教學三時期 × 9 大原則</span>
+        <span class="mnemonic-tag">口訣：前準類 中自興個社 後熟同</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="mini-table">
+        <tr><th>時期</th><th>原則</th><th>核心記憶</th></tr>
+        <tr><td rowspan="2">教學前</td><td><span class="key">準備原則</span></td><td>學生心理準備（動機、驅力、成熟度）</td></tr>
+        <tr><td><span class="key">類化原則</span></td><td>新學習建立在舊經驗上</td></tr>
+        <tr><td rowspan="4">教學中</td><td><span class="key">自動原則</span></td><td>孔子：「不憤不啟，不悱不發…」</td></tr>
+        <tr><td><span class="key">興趣（努力）原則</span></td><td>孔子：「知之者不如好之者…」</td></tr>
+        <tr><td><span class="key">個別適應原則</span></td><td>因材施教；孟子：「以先知覺後知…」</td></tr>
+        <tr><td><span class="key">社會化原則</span>（共同參與原則）</td><td>教學情境社會化，學習社會生活</td></tr>
+        <tr><td rowspan="2">教學後</td><td><span class="key">熟練原則</span></td><td>Thorndike 練習律；澈底達成目的</td></tr>
+        <tr><td><span class="key">同時學習原則</span></td><td>克伯屈：<span class="key">主學習</span>＋<span class="key">副學習</span>＋<span class="key">附（輔）學習</span></td></tr>
+      </table>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">同時學習三分法</div>
+        <div class="mnemonic-text">主副附</div>
+        <div class="mnemonic-expand">
+          <strong>主學習</strong>：教學行為目標（如：瞭解鴉片戰爭始末）<br>
+          <strong>副學習</strong>：相關概念（中英地理關係、鴉片危害）<br>
+          <strong>附學習</strong>：情意態度（愛國情操、發憤圖強）
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== DESIGN ==================== -->
+<div id="design" class="section">
+  <div class="sec-title">二、教學設計</div>
+
+  <!-- GMI -->
+  <div class="group-label">【一般教學模式 GMI】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">GMI 一般教學模式</span>
+        <span class="scholar-tag">Glaser / Gillet</span>
+        <span class="mnemonic-tag">分訂選實</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>四個基本要素：<span class="key">分析教學對象</span>→<span class="key">訂定教學目標</span>→<span class="key">選用教學方法</span>→<span class="key">實施教學評量</span></li>
+        <li>格拉塞 Glaser 模式流程：<span class="key">分析教學目標</span>→<span class="key">診斷起點行為</span>→<span class="key">設計教學活動</span>→<span class="key">進行教學評量</span>（回饋環線）</li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣</div>
+        <div class="mnemonic-text">分訂選實</div>
+        <div class="mnemonic-expand">分析→訂定→選用→實施</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSURE -->
+  <div class="group-label">【線性模式 ASSURE】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">ASSURE 模式</span>
+        <span class="scholar-tag">韓內克、莫藍達、羅素（1982）</span>
+        <span class="mnemonic-tag">分陳選使要評</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="mini-table">
+        <tr><th>字母</th><th>全文</th><th>重點</th></tr>
+        <tr><td><span class="key">A</span></td><td>Analyze learners</td><td><span class="key">分析學習者</span>：一般性（性別年齡）、特殊性（先備知能）、<span class="key">學習風格</span></td></tr>
+        <tr><td><span class="key">S</span></td><td>State objective</td><td><span class="key">陳述學習目標</span>：重點在學習者「獲得什麼」</td></tr>
+        <tr><td><span class="key">S</span></td><td>Select media and materials</td><td><span class="key">選擇媒體與教材</span>：連接起點與終點</td></tr>
+        <tr><td><span class="key">U</span></td><td>Utilize media and materials</td><td><span class="key">使用媒體與教材</span>：事前觀看、安排環境</td></tr>
+        <tr><td><span class="key">R</span></td><td>Require learner participation</td><td><span class="key">要求學習者的參與</span>：練習新知能、給予回饋</td></tr>
+        <tr><td><span class="key">E</span></td><td>Evaluation</td><td><span class="key">評量及修正</span>：學習者成就＋媒體教材＋教學過程</td></tr>
+      </table>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣</div>
+        <div class="mnemonic-text">分陳選使要評</div>
+        <div class="mnemonic-expand">分析→陳述→選擇→使用→要求參與→評量</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dick & Carey -->
+  <div class="group-label">【系統化教學設計 Dick & Carey】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">Dick & Carey 10 步驟</span>
+        <span class="scholar-tag">Dick & Carey（1978）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>廣泛應用於<span class="key">工商企業界</span></li>
+        <li>十步驟：
+          <ul class="sub-list">
+            <li>①<span class="key">界定教學目標</span></li>
+            <li>②<span class="key">進行教學分析</span></li>
+            <li>③<span class="key">檢查起點行為</span></li>
+            <li>④<span class="key">確定學習者特性與環境</span></li>
+            <li>⑤<span class="key">撰寫行為目標</span></li>
+            <li>⑥<span class="key">發展評量工具</span></li>
+            <li>⑦<span class="key">發展教學策略</span></li>
+            <li>⑧<span class="key">發展及選擇教材</span></li>
+            <li>⑨<span class="key">設計並進行教學過程評鑑、修正教學</span></li>
+            <li>⑩<span class="key">進行總結性評鑑</span></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- R2D2 -->
+  <div class="group-label">【建構觀教學模式 R2D2】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">R2D2 模式</span>
+        <span class="scholar-tag">J. Willis（1995）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>全名：<span class="key">Recursive and Reflective Design and Development</span>（循環且反省的設計和發展模式）</li>
+        <li>三項基本特徵：
+          <ul class="sub-list">
+            <li><span class="key">界定焦點 define</span>（未提教學目標）：注重<span class="key">創造—參與性的團隊</span></li>
+            <li><span class="key">設計與發展焦點 design and development</span>：建立關係→情境探究→腦力激盪→故事板→環式設計</li>
+            <li><span class="key">散播焦點 dissemination</span>：教材產品包裝、散播、採用；配合地區性教師與學生需求</li>
+          </ul>
+        </li>
+        <li>沒有<span class="key-red">總結性評量</span>；鼓勵學生<span class="key">自己設定個人目標</span>，進行不同學習活動</li>
+        <li>評鑑方式：<span class="key">日記</span>、<span class="key">計畫</span>、<span class="key">檔案</span>、<span class="key">活動站</span>等</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ARCS -->
+  <div class="group-label">【ARCS 動機設計模式】</div>
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">ARCS 模式</span>
+        <span class="scholar-tag">Keller（1984）</span>
+        <span class="mnemonic-tag">口訣：滿心關注</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <table class="mini-table">
+        <tr><th>字母</th><th>意義</th><th>核心／教學策略</th></tr>
+        <tr><td><span class="key">A</span></td><td>Attention 引起注意</td><td>吸引興趣、刺激好奇心｜提供變化性、激發求知需求、擅用詢問技巧</td></tr>
+        <tr><td><span class="key">R</span></td><td>Relevance 切身相關</td><td>滿足個人需求和目標｜聯結熟悉事物、以學習目標為主、配合學生特性</td></tr>
+        <tr><td><span class="key">C</span></td><td>Confidence 建立信心</td><td>相信自己有能力完成｜明定成功標準、提供自我掌控機會、提供成功機會</td></tr>
+        <tr><td><span class="key">S</span></td><td>Satisfaction 感到滿足</td><td>內在和外在的鼓勵報償｜提供顯身手機會、公平回饋與報償</td></tr>
+      </table>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（記順序）</div>
+        <div class="mnemonic-text">滿心關注</div>
+        <div class="mnemonic-expand">
+          <strong>滿</strong>（Satisfaction）→<strong>心</strong>（Confidence 信心）→<strong>關</strong>（Relevance 相關）→<strong>注</strong>（Attention 注意）<br>
+          ※ 反推 ARCS 順序：注→關→心→滿
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== METHODS ==================== -->
+<div id="methods" class="section">
+  <div class="sec-title">三、教學方法</div>
+
+  <!-- Teacher-centered -->
+  <div class="group-label">【一、教師本位教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">講述教學法（講演法）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>運用<span class="key">敘述或演講方式</span>，將教材知識傳遞給學習者</li>
+        <li>屬於<span class="key">注入式教學</span>；偏向教師<span class="key">單向</span>活動</li>
+        <li>教學程序：<span class="key">揭示綱要→詳述內容→綜述要點</span></li>
+        <li>優點：簡單方便、節省時間、適用大班教學</li>
+        <li>缺點：單向學習、養成被動態度、不易激發動機</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">直接教學法</span>
+        <span class="scholar-tag">Rosenshine 創立</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li><span class="key">教師中心策略</span>；採<span class="key">解釋、舉例、練習回饋</span>形式</li>
+        <li>教師清楚陳述教學目標→依部分相關教學內容→透過<span class="key">訂正性回饋</span>→達到<span class="key">精熟學習</span></li>
+        <li>優點：對低能力學習者特別有用；教師能<span class="key">控制教學進程</span></li>
+        <li>缺點：能成功學習技巧，但不一定能<span class="key">解決問題</span>；無法影響態度、創造力、社會發展</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cognitive -->
+  <div class="group-label">【二、偏向認知領域的教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">觀察法（直觀教學法）</span>
+        <span class="scholar-tag">斐斯塔洛齊</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>用<span class="key">實事實物</span>教學（實物、標本、模型、圖畫、電影）</li>
+        <li>功用：正確知識、引起興趣、增加記憶</li>
+        <li>限制：<span class="key">無法單獨使用</span>，須配合講解說明和問答討論；<span class="key">抽象觀念無法觀察</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">探究教學法（問思教學法）</span>
+        <span class="scholar-tag">Suchman 蘇克曼</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>強調<span class="key">探尋與解決問題的過程</span>；學生主動探尋</li>
+        <li>以<span class="key">學生為中心</span>；強調求知是<span class="key">過程而非結果</span></li>
+        <li>步驟：<span class="key">引起動機→歸納原理原則→證明及應用→價值澄清與實踐</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">啟發式教學法（赫爾巴特四段法 / 萊因五段法）</span>
+        <span class="scholar-tag">赫爾巴特 / 蘇格拉底（產婆法）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>赫爾巴特基礎：<span class="key">心理狀態說</span>（舊表象互融，構成觀念類化）</li>
+        <li><span class="key">四段教學法</span>：<span class="key">明瞭→聯合→系統→方法</span></li>
+        <li>萊因<span class="key">五段教學法</span>：<span class="key">預備→提示→比較→總括→應用</span></li>
+        <li>優點：歸納與演繹並用</li>
+        <li>缺點：過分以教師為中心；學生甚少主動學習機會</li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（五段）</div>
+        <div class="mnemonic-text">預提比總應</div>
+        <div class="mnemonic-expand">預備→提示→比較→總括→應用</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">討論教學法（小組討論法）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>採<span class="key">對話形式</span>；師生、生生交換意見</li>
+        <li>實踐<span class="key">教學民主化</span>的具體表現</li>
+        <li>三種常見討論小組法：
+          <ul class="sub-list">
+            <li><span class="key">菲力普 66 法（六六討論法）</span>：六人小組、六分鐘討論</li>
+            <li><span class="key">討論會</span>：2-3 人深入研究報告，15 人討論</li>
+            <li><span class="key">導生（小老師）討論小組</span>：不超過五人；善用增強</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">問題教學法</span>
+        <span class="scholar-tag">杜威 Dewey</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>以<span class="key">生活情境中的問題</span>為中心，指導學生應用科學方法解決問題</li>
+        <li>杜威五步驟：<span class="key">問題發生→確定問題性質→提出假設→選擇合理假設→驗證假設</span></li>
+        <li>優點：客觀、科學、有系統；易激發學習動機</li>
+        <li>缺點：問題不易尋找；僅適用部分學科及高年級（社會、自然）</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Affective -->
+  <div class="group-label">【三、偏向情意領域的教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">欣賞教學法</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>三種欣賞：<span class="key">藝術的欣賞</span>（美感）、<span class="key">道德的欣賞</span>（善）、<span class="key">理智的欣賞</span>（真）</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">價值澄清法</span>
+        <span class="scholar-tag">Rath、哈明、西蒙</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>透過「<span class="key">選擇、珍視、行動</span>」的過程，教導學生審慎思考</li>
+        <li>強調<span class="key">價值獲得的過程</span>，而非「對」或「錯」的價值內容</li>
+        <li>教學過程四時期：<span class="key">瞭解→關聯→評價→反省</span></li>
+        <li>以<span class="key">人本主義</span>為理論基礎</li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（三歷程）</div>
+        <div class="mnemonic-text">選珍行</div>
+        <div class="mnemonic-expand">選擇→珍視（讚賞）→表現（行動）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">角色扮演教學</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>模擬真實情境，學生扮演各種角色</li>
+        <li>適合<span class="key">情意</span>目標的學習；有助於<span class="key">價值觀的澄清與建立</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Skills -->
+  <div class="group-label">【四、偏向技能領域的教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">設計教學法 Project Method</span>
+        <span class="scholar-tag">克伯屈 Kilpatrick 提倡；Richards 起源</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>由學生設計的<span class="key">實作學習方法</span>，以大設計項目為中心</li>
+        <li>強調學習與<span class="key">實際生活經驗結合</span></li>
+        <li>原則：<span class="key">統覺類化</span>、<span class="key">歸納與演繹聯合運用</span>、<span class="key">自動化</span></li>
+        <li>步驟：<span class="key">決定目的→擬訂計畫→實際執行→評鑑結果</span></li>
+        <li>缺點：不易獲得系統知識；易遺漏重要教材；浪費時間於不重要活動</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Individualized -->
+  <div class="group-label">【五、個別化取向的教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">編序教學法</span>
+        <span class="scholar-tag">Skinner</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>教材由易而難，依序學習，<span class="key">即刻核對正誤</span>，按自我進度</li>
+        <li>三種編輯方式：<span class="key">直線編輯</span>（所有學生按連續單元）、<span class="key">分支編輯</span>（依作答對錯決定方向）、<span class="key">綜合編輯</span>（兩者結合）</li>
+        <li>優點：減少挫折、易於診斷、提高效果、補救班級教學</li>
+        <li>缺點：不易普遍推行；情意陶冶無能為力</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">精熟教學法</span>
+        <span class="scholar-tag">Bloom（1968）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>精熟程度：<span class="key">80~90%</span></li>
+        <li>學生成就受<span class="key">可變因素</span>（起點行為、親子關係）與<span class="key">不可變因素</span>（社經地位、智力）交互決定</li>
+        <li>步驟：引導→精熟教學（提示、參與、增強、<span class="key">回饋與校正</span>）→<span class="key">形成性測驗</span>→引發動機→校正及充實活動</li>
+        <li>優點：適應個別差異；確保學習標準；簡化學習內容</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">個人化系統教學 PSI（凱勒教學法）</span>
+        <span class="scholar-tag">Keller（哥倫比亞大學）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>精熟程度：<span class="key">90% 或 100%</span></li>
+        <li>強調學習者的<span class="key">主導權和自主權</span></li>
+        <li>七種基本要素：<span class="key">熟練標準</span>、<span class="key">學生自我控速</span>、<span class="key">單元考試和成績評量</span>、<span class="key">立即回饋</span>、<span class="key">助理制度</span>、<span class="key">學習材料</span>、<span class="key">講述和展示</span></li>
+        <li>採用<span class="key">標準參照制度</span>；總結性評量佔 25%</li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（7要素）</div>
+        <div class="mnemonic-text">熟速單立助材講</div>
+        <div class="mnemonic-expand">熟練標準→控速→單元評量→立即回饋→助理→材料→講述展示</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">個別處方教學 IPI</span>
+        <span class="scholar-tag">美國匹茲堡大學（1964）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>六步驟：<span class="key">安置性評量→教學前評量→提供學習處方→實施習作測驗（CET，精熟85%）→實施後測→決策</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Cooperative -->
+  <div class="group-label">【六、合作取向的教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">協同教學法</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>特徵：由<span class="key">二個或更多教師</span>組成<span class="key">教學團</span></li>
+        <li>教學方式：<span class="key">大班教學</span>、<span class="key">分組活動</span>及<span class="key">個別學習</span></li>
+        <li>非制式協同：<span class="key">合班教學</span>、<span class="key">交換教學</span>、<span class="key">循環教學</span>、<span class="key">相關科目聯繫教學</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">合作學習教學法 × 9 種類型</span>
+        <span class="mnemonic-tag">STAD / TGT / TAI / Jigsaw / G-I / CIRC…</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>組成要素：<span class="key">任務結構</span>、<span class="key">酬賞結構</span>、<span class="key">權威結構</span></li>
+        <li>教學原理：<span class="key">異質分組</span>、<span class="key">積極互賴</span>、<span class="key">面對面助長互動</span>、<span class="key">評鑑個人學習績效</span>、<span class="key">小組酬賞</span>、<span class="key">人際技巧</span>、<span class="key">團體歷程</span></li>
+      </ul>
+      <table class="mini-table" style="margin-top:12px">
+        <tr><th>縮寫</th><th>名稱</th><th>關鍵特點</th></tr>
+        <tr><td><span class="key">STAD</span></td><td>學生小組成就區分法</td><td>個別測驗（非遊戲）；4-5 人異質分組；個人進步計小組分</td></tr>
+        <tr><td><span class="key">TGT</span></td><td>小組遊戲競賽法</td><td>以<span class="key">學藝競賽代替考試</span>；能力分級，同程度競賽</td></tr>
+        <tr><td><span class="key">TAI</span></td><td>小組加速學習教學法</td><td>結合<span class="key">合作學習與個別化教學</span>；個別化數學教材</td></tr>
+        <tr><td><span class="key">Jigsaw</span></td><td>拼圖法</td><td>每組各學一部分→<span class="key">專家組</span>精熟→回原組教導</td></tr>
+        <tr><td><span class="key">Jigsaw II</span></td><td>拼圖法第二代</td><td>適用社會、文學等概念性學科；有異質分組</td></tr>
+        <tr><td><span class="key">G-I</span></td><td>團體探究法</td><td>小組合作調查討論；每組可選學習內容</td></tr>
+        <tr><td><span class="key">CIRC</span></td><td>合作統整閱讀寫作法</td><td>同質閱讀組＋異質配對組；含追蹤探索、朗讀、寫作</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Conceptual/Thinking -->
+  <div class="group-label">【七、概念與思考取向的教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">創造思考教學（Wallas 四階段）</span>
+        <span class="scholar-tag">Torrance / Wallas</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>Wallas 四階段：<span class="key">準備期→醞釀期→豁朗期→驗證期</span></li>
+        <li><span class="key">腦力激盪法 Brainstorming</span>（Osborn）：八人小組；四原則：確定問題多提意見→記錄越多越好→<span class="key">先不批評</span>→最後篩選</li>
+        <li><span class="key">檢核表技術</span>：旁敲側擊尋找線索</li>
+        <li><span class="key">屬性列舉法</span>（克勞福 1931）：列舉屬性→改進→新用途</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">ATDE 愛的模式</span>
+        <span class="scholar-tag">陳龍安</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>四要素：<span class="key">問 Asking</span>→<span class="key">想 Thinking</span>→<span class="key">做 Doing</span>→<span class="key">評 Evaluation</span></li>
+        <li>創造思考非無中生有，而是<span class="key">推陳出新</span></li>
+        <li>強調自由、民主、安全、和諧的環境</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">情境教學 Situated Learning</span>
+        <span class="scholar-tag">Collins、Brown、Newman</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>六特色：<span class="key">分散式智慧</span>、<span class="key">真實性工作</span>、<span class="key">純自然學習評量</span>、<span class="key">社會活動</span>、<span class="key">教師新角色</span>（促進者/教練）、<span class="key">學習環境</span></li>
+        <li>Collins 五原則：<span class="key">真實性</span>、<span class="key">交織性</span>、<span class="key">連結性</span>、<span class="key">反思性</span>、<span class="key">循環性</span></li>
+        <li><span class="key">認知學徒制</span>：示範→<span class="key">鷹架</span>→指導→闡明→監控→<span class="key">反省</span>→探究</li>
+        <li><span class="key">錨式情境教學 anchored instruction</span>：將教學定錨於鉅觀情境，引導學生發覺、形成、解決問題</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Others -->
+  <div class="group-label">【八、其他教學法】</div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">交互教學法（相互教學法）</span>
+        <span class="scholar-tag">Vygotsky 理論為基礎</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>利用<span class="key">社會性支持情境</span>、<span class="key">專家鷹架</span>協助閱讀理解</li>
+        <li>四策略：<span class="key">摘要</span>→<span class="key">提出問題</span>→<span class="key">澄清</span>→<span class="key">預測</span></li>
+        <li>逐步責任釋放：師→生，「師生對話」→「同儕對話」</li>
+        <li>優點：增進閱讀理解；培養<span class="key">後設認知</span>（自我監控與自我評鑑）</li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣（四策略）</div>
+        <div class="mnemonic-text">摘問澄預</div>
+        <div class="mnemonic-expand">摘要→提出問題→澄清→預測</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">差異化教學</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>針對不同程度、需求、方式、興趣學生提供<span class="key">多元學習輔導方案</span></li>
+        <li>三理論基礎：<span class="key">腦力研究</span>、<span class="key">學習風格與多元智慧</span>、<span class="key">真實性評量</span></li>
+        <li>比個別化教學更廣：個別化教學→學生自定進度；差異化→班級中彈性調整</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">反省性教學</span>
+        <span class="scholar-tag">Dewey（反省性行為）/ Schon（在行動中反省）</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li>五層次：<span class="key">技術的反省</span>→<span class="key">實際的反省</span>→<span class="key">角色的反省</span>→<span class="key">批判的反省</span>→<span class="key">反省的反省（後設省思）</span></li>
+        <li>五種激發反省方法：<span class="key">省思札記</span>、<span class="key">案例法</span>、觀察、討論、寫作</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header" onclick="toggleCard(this)">
+      <div class="card-title-row">
+        <span class="card-name">6E 品格教育方法</span>
+        <span class="mnemonic-tag">口訣：典啟勸環體正</span>
+      </div>
+      <span class="toggle-icon">▾</span>
+    </div>
+    <div class="card-body">
+      <ul class="point-list">
+        <li><span class="key">典範學習 Example</span>：教師家長成為學習典範</li>
+        <li><span class="key">啟發思辨 Explanation</span>：對話與思辨，非背誦規則</li>
+        <li><span class="key">勸勉激勵 Exhortation</span>：影片、故事、體驗教學</li>
+        <li><span class="key">環境形塑 Environment</span>：典範領導、校園倫理文化</li>
+        <li><span class="key">體驗反思 Experience</span>：服務學習、社區服務</li>
+        <li><span class="key">正向期許 Expectation</span>：設定品德目標、自我激勵</li>
+      </ul>
+      <div class="mnemonic-box">
+        <div class="mnemonic-label">口訣</div>
+        <div class="mnemonic-text">典啟勸環體正</div>
+        <div class="mnemonic-expand">典範→啟發→勸勉→環境→體驗→正向</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ==================== QUIZ ==================== -->
+<div id="quiz" class="section">
+  <div class="sec-title">✏️ 練習測驗</div>
+  <div id="quiz-container"></div>
+  <div id="quiz-result" style="display:none">
+    <div class="quiz-score" id="score-display"></div>
+    <div style="text-align:center">
+      <button class="btn btn-gold" onclick="restartQuiz()">🔄 再做一次</button>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:16px">
+    <button class="btn" onclick="showSection('theory')">← 回去複習</button>
+  </div>
+</div>
+
+<script>
+// NAV
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabs = document.querySelectorAll('.nav-tab');
+  const idx = ['overview','theory','design','methods','quiz'];
+  tabs[idx.indexOf(id)].classList.add('active');
+  if (id === 'quiz') loadQuiz();
+}
+
+// TOGGLE CARDS
+function toggleCard(header) {
+  const card = header.parentElement;
+  card.classList.toggle('open');
+}
+
+// QUIZ DATA
+const questions = [
+  {
+    q: '下列哪一項是 Shulman 提出的「學科教學知識（PCK）」的最佳說明？',
+    choices: ['教師對各學科均適用的教學原則與策略', '教師對自己任教學科知識加以轉化，發展出教學方法與策略', '教師對課程設計、組織與銜接的基本知識', '教師對學習者發展層次的了解'],
+    ans: 1,
+    explain: 'PCK（pedagogical content knowledge）= 學科知識 + 教學法的融合與轉化，是 Shulman 最常被考的概念。'
+  },
+  {
+    q: 'ARCS 動機設計模式中，幫助學生建立起「相信自己有掌握完成能力」的要素是？',
+    choices: ['Attention（引起注意）', 'Relevance（切身相關）', 'Confidence（建立信心）', 'Satisfaction（感到滿足）'],
+    ans: 2,
+    explain: 'C = Confidence 建立信心，策略包括明定成功標準、提供自我掌控機會。口訣：滿（S）心（C）關（R）注（A）'
+  },
+  {
+    q: '「強調學習發生於真實的社會文化情境中」是哪位學者的主張？',
+    choices: ['Ausubel', 'Skinner', 'Lave', 'Bandura'],
+    ans: 2,
+    explain: 'Lave 的情境認知學習理論：主張豐富學習資源、多元策略，且學習發生於真實社會文化情境中。'
+  },
+  {
+    q: 'ASSURE 模式中「R」代表什麼？',
+    choices: ['Rearrange learners（重新分組）', 'Require learner participation（要求學習者參與）', 'Review materials（複習教材）', 'Record outcomes（記錄成果）'],
+    ans: 1,
+    explain: 'ASSURE 的 R = Require learner participation，即提供機會讓學習者練習新知能並給予回饋。'
+  },
+  {
+    q: '教學規準中，「用啟發方式而不是強迫或揠苗助長」是指哪一規準？',
+    choices: ['效率性', '認知性', '自願性', '釋明性'],
+    ans: 2,
+    explain: '自願性（voluntariness）對應教學方法面向，強調啟發而非強迫。口訣：效認價自 目釋覺'
+  },
+  {
+    q: '精熟學習（Bloom）與個人化系統教學 PSI（Keller）的精熟標準分別是？',
+    choices: ['精熟學習 90-100%；PSI 80-90%', '精熟學習 80-90%；PSI 90-100%', '兩者皆為 80-90%', '兩者皆為 90-100%'],
+    ans: 1,
+    explain: 'Bloom 精熟學習 = 80~90%；Keller PSI = 90% 或 100%（Keller 本人要求 100%）'
+  },
+  {
+    q: '「拼圖法（Jigsaw）」教學的最大特色是？',
+    choices: ['同質分組，競賽計分', '每組各學一部分，成立專家組後回原組互教', '全班共同進行習作測驗', '教師直接講授全部內容'],
+    ans: 1,
+    explain: 'Jigsaw：各組負責不同教材→成立「專家組」精熟→回原組教導其他同學，形成學習共同體。'
+  },
+  {
+    q: '交互教學法（reciprocal teaching）的理論依據是？',
+    choices: ['Piaget 認知發展論', 'Vygotsky 社會認知發展理論', 'Ausubel 意義學習理論', 'Skinner 操作制約論'],
+    ans: 1,
+    explain: '交互教學法係根據 Vygotsky 的認知發展理論設計，強調社會性支持、鷹架、師生對話→同儕對話。'
+  },
+  {
+    q: '赫爾巴特的五段教學法（萊因修訂版）正確順序是？',
+    choices: ['提示→預備→比較→總括→應用', '預備→提示→比較→總括→應用', '明瞭→聯合→系統→方法→應用', '準備→分析→發展→綜合→評量'],
+    ans: 1,
+    explain: '萊因五段法：預備→提示→比較→總括→應用（口訣：預提比總應）。四段法（赫爾巴特原版）：明瞭→聯合→系統→方法。'
+  },
+  {
+    q: 'R2D2 建構觀教學模式與其他傳統教學設計模式最大的差異是？',
+    choices: ['強調系統化的總結性評量', '沒有總結性評量，鼓勵學生自訂個人目標', '以工商企業界為主要應用場域', '完全依照線性程序設計'],
+    ans: 1,
+    explain: 'R2D2 沒有總結性評量，評鑑採日記、計畫、檔案等，鼓勵學生自己設定目標，進行多元學習活動。'
+  },
+];
+
+let current = 0;
+let score = 0;
+let answered = [];
+
+function loadQuiz() {
+  current = 0; score = 0; answered = new Array(questions.length).fill(false);
+  document.getElementById('quiz-result').style.display = 'none';
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const container = document.getElementById('quiz-container');
+  container.innerHTML = '';
+  questions.forEach((q, qi) => {
+    const card = document.createElement('div');
+    card.className = 'quiz-card';
+    card.innerHTML = `
+      <div class="quiz-q">Q${qi+1}. ${q.q}</div>
+      <ul class="quiz-choices" id="choices-${qi}">
+        ${q.choices.map((c,ci) => `<li onclick="selectAnswer(${qi},${ci})">${c}</li>`).join('')}
+      </ul>
+      <div class="quiz-explain" id="explain-${qi}">💡 ${q.explain}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectAnswer(qi, ci) {
+  if (answered[qi]) return;
+  answered[qi] = true;
+  const choices = document.querySelectorAll(`#choices-${qi} li`);
+  choices.forEach(c => c.classList.add('disabled'));
+  if (ci === questions[qi].ans) {
+    choices[ci].classList.add('correct');
+    score++;
+  } else {
+    choices[ci].classList.add('wrong');
+    choices[questions[qi].ans].classList.add('correct');
+  }
+  document.getElementById(`explain-${qi}`).classList.add('show');
+
+  if (answered.every(Boolean)) {
+    setTimeout(() => {
+      document.getElementById('quiz-result').style.display = 'block';
+      document.getElementById('score-display').textContent = `得分：${score} / ${questions.length}`;
+      document.getElementById('quiz-result').scrollIntoView({behavior:'smooth'});
+    }, 800);
+  }
+}
+
+function restartQuiz() { loadQuiz(); window.scrollTo({top:0,behavior:'smooth'}); }
+</script>
+
+</body>
+</html>
